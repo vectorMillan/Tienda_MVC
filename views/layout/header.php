@@ -22,12 +22,12 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="<?= base_url ?>">Inicio</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Categoría 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Categoría 2</a>
-                    </li>
+                    <?php $categorias = Utils::showCategorias(); ?>
+                    <?php while ($cat = $categorias->fetch_object()): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url ?>categoria/ver&id=<?= $cat->id ?>"><?= $cat->nombre ?></a>
+                        </li>
+                    <?php endwhile; ?>
                 </ul>
                 <span class="navbar-text">
                     Login / Registro

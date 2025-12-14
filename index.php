@@ -3,6 +3,7 @@ session_start();
 require_once 'autoload.php';
 require_once 'config/db.php';
 require_once 'config/parameters.php';
+require_once 'helpers/utils.php'; // Cargamos la clase Utils
 require_once 'views/layout/header.php';
 
 // FUNCIÓN DE AYUDA PARA MOSTRAR ERRORES
