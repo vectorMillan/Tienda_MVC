@@ -100,4 +100,30 @@ class Usuario
         }
         return $result;
     }
+
+    public function login($email, $password)
+    {
+        $result = false;
+        $email = $this->db->real_escape_string($email);
+
+        // 1. Comprobar si existe el usuario
+        $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+        $login = $this->db->query($sql);
+
+        if ($login && $login->num_rows == 1) {
+            // 2. Sacar el objeto usuario de la BD
+            $usuario = $login->fetch_object();
+
+            // 3. Verificar la contraseña
+            // password_verify comprueba si la contraseña escrita ($password) 
+            // coincide con el hash guardado en la BD ($usuario->password)
+            $verify = password_verify($password, $usuario->password);
+
+            if ($verify) {
+                $result = $usuario; // Devolvemos el objeto completo del usuario
+            }
+        }
+
+        return $result;
+    }
 }

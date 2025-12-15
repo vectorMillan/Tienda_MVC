@@ -18,20 +18,35 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="<?= base_url ?>">Inicio</a>
-                    </li>
-                    <?php $categorias = Utils::showCategorias(); ?>
-                    <?php while ($cat = $categorias->fetch_object()): ?>
+                <ul class="navbar-nav ms-auto">
+                    <?php if (!isset($_SESSION['identity'])): ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url ?>categoria/ver&id=<?= $cat->id ?>"><?= $cat->nombre ?></a>
+                            <a class="nav-link" href="<?= base_url ?>usuario/login">Login</a>
                         </li>
-                    <?php endwhile; ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url ?>usuario/registro">Registrarse</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <?= $_SESSION['identity']->nombre ?> <?= $_SESSION['identity']->apellidos ?>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <?php if (isset($_SESSION['admin'])): ?>
+                                    <li><a class="dropdown-item" href="#">Gestionar Categorías</a></li>
+                                    <li><a class="dropdown-item" href="#">Gestionar Productos</a></li>
+                                    <li><a class="dropdown-item" href="#">Gestionar Pedidos</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                <?php endif; ?>
+
+                                <li><a class="dropdown-item" href="#">Mis Pedidos</a></li>
+                                <li><a class="dropdown-item" href="<?= base_url ?>usuario/logout">Cerrar sesión</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
                 </ul>
-                <span class="navbar-text">
-                    Login / Registro
-                </span>
             </div>
         </div>
     </nav>

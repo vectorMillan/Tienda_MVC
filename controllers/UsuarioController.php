@@ -46,4 +46,47 @@ class UsuarioController
         // Redireccionar al registro pase lo que pase para mostrar el mensaje
         header("Location:" . base_url . 'usuario/registro');
     }
+
+    // Muestra el formulario de login
+    public function login()
+    {
+        require_once 'views/usuario/login.php';
+    }
+
+    // Recibe los datos y crea la sesión
+    public function identificar()
+    {
+        if (isset($_POST)) {
+            // Recogemos datos del formulario
+            $usuario = new Usuario();
+            $identity = $usuario->login($_POST['email'], $_POST['password']);
+
+            if ($identity && is_object($identity)) {
+                // ÉXITO: Creamos la sesión de identidad
+                $_SESSION['identity'] = $identity;
+
+                // Si es admin, creamos una sesión especial (opcional por ahora)
+                if ($identity->rol == 'admin') {
+                    $_SESSION['admin'] = true;
+                }
+            } else {
+                // ERROR: Sesión de fallo
+                $_SESSION['error_login'] = 'Identificación fallida !!';
+            }
+        }
+        header("Location:" . base_url);
+    }
+
+    public function logout()
+    {
+        if (isset($_SESSION['identity'])) {
+            unset($_SESSION['identity']);
+        }
+
+        if (isset($_SESSION['admin'])) {
+            unset($_SESSION['admin']);
+        }
+
+        header("Location:" . base_url);
+    }
 }
