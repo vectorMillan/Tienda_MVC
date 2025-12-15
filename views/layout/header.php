@@ -33,7 +33,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <?php if (isset($_SESSION['admin'])): ?>
-                                    <li><a class="dropdown-item" href="#">Gestionar Categorías</a></li>
+                                    <li><a class="dropdown-item" href="<?= base_url ?>categoria/index">Gestionar Categorías</a></li>
                                     <li><a class="dropdown-item" href="#">Gestionar Productos</a></li>
                                     <li><a class="dropdown-item" href="#">Gestionar Pedidos</a></li>
                                     <li>

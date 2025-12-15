@@ -17,4 +17,27 @@ class CategoriaController
         // Nota: Pasamos la variable $categorias a la vista implícitamente
         require_once 'views/categoria/index.php';
     }
+
+    // Muestra el formulario de creación (Solo para admins)
+    public function crear()
+    {
+        Utils::isAdmin(); // El guardia verifica primero
+        require_once 'views/categoria/crear.php';
+    }
+
+    // Guarda la categoría en la BD
+    public function save()
+    {
+        Utils::isAdmin(); // El guardia verifica primero
+
+        if (isset($_POST) && isset($_POST['nombre'])) {
+            // Guardar la categoría
+            $categoria = new Categoria();
+            $categoria->setNombre($_POST['nombre']);
+            $categoria->save();
+        }
+
+        // Redirigir al listado
+        header("Location:" . base_url . "categoria/index");
+    }
 }

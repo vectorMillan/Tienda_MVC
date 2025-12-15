@@ -1,6 +1,6 @@
 <h1>Gestionar Categorías</h1>
 
-<a href="#" class="btn btn-success mb-3">Crear Categoría</a>
+<a href="<?= base_url ?>categoria/crear" class="btn btn-success mb-3">Crear Categoría</a>
 
 <table class="table table-hover table-bordered">
     <thead class="table-dark">

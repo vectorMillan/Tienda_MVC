@@ -42,4 +42,20 @@ class Categoria
         $categorias = $this->db->query("SELECT * FROM categorias ORDER BY id DESC;");
         return $categorias;
     }
+
+    public function save()
+    {
+        // Escapamos el nombre por seguridad
+        $nombre = $this->db->real_escape_string($this->nombre);
+
+        // Insertamos: ID (null autoincrement), NOMBRE
+        $sql = "INSERT INTO categorias VALUES(NULL, '{$nombre}');";
+        $save = $this->db->query($sql);
+
+        $result = false;
+        if ($save) {
+            $result = true;
+        }
+        return $result;
+    }
 }
