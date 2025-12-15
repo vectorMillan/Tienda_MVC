@@ -9,4 +9,13 @@ class Utils
         $result = $categoria->getAll(); // Usamos el método que creamos para sacar todas las filas de la BD
         return $result;
     }
+
+    public static function deleteSession($name)
+    {
+        if (isset($_SESSION[$name])) {
+            $_SESSION[$name] = null;
+            unset($_SESSION[$name]);
+        }
+        return $name;
+    }
 }
