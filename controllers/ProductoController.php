@@ -8,7 +8,13 @@ class ProductoController
 
     public function index()
     {
-        // Renderiza la vista de destacados (lo haremos más adelante)
+        // Instanciamos el modelo
+        $producto = new Producto();
+
+        // Pedimos 6 productos aleatorios
+        $productos = $producto->getRandom(6);
+
+        // Renderizamos la vista pasándole los datos
         require_once 'views/producto/destacados.php';
     }
 
