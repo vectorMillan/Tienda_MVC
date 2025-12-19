@@ -8,5 +8,5 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # 2. REGLA DE ORO:
 # Todo lo que tenga formato "palabra/palabra" (ej: usuario/registro)
 # conviértelo internamente a index.php?controller=X&action=Y
-RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$ index.php?controller=$1&action=$2 [L]
+RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$ index.php?controller=$1&action=$2 [QSA,L]
 </IfModule>

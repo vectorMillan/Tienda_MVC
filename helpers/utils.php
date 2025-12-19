@@ -6,8 +6,8 @@ class Utils
     {
         require_once 'models/Categoria.php';
         $categoria = new Categoria(); // Instanciamos el modelo
-        $result = $categoria->getAll(); // Usamos el método que creamos para sacar todas las filas de la BD
-        return $result;
+        $categorias = $categoria->getAll(); // Usamos el método que creamos para sacar todas las filas de la BD
+        return $categorias;
     }
 
     public static function deleteSession($name)

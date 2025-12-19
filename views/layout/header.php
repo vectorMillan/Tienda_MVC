@@ -18,6 +18,23 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url ?>">Inicio</a>
+                    </li>
+
+                    <?php $categorias = Utils::showCategorias(); ?>
+
+                    <?php while ($cat = $categorias->fetch_object()): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url ?>categoria/ver?id=<?= $cat->id ?>">
+                                <?= $cat->nombre ?>
+                            </a>
+                        </li>
+                    <?php endwhile; ?>
+                </ul>
+
                 <ul class="navbar-nav ms-auto">
                     <?php if (!isset($_SESSION['identity'])): ?>
                         <li class="nav-item">
