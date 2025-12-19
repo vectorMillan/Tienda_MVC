@@ -1,12 +1,32 @@
 <IfModule mod_rewrite.c>
-RewriteEngine On
-
-# 1. Si el archivo o carpeta existe físicamente (ej: imagenes, css), no hagas nada y sírvelo.
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# 2. REGLA DE ORO:
-# Todo lo que tenga formato "palabra/palabra" (ej: usuario/registro)
-# conviértelo internamente a index.php?controller=X&action=Y
-RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$ index.php?controller=$1&action=$2 [QSA,L]
+    # Activar el motor de reescritura de URLs
+    RewriteEngine On
+    
+    # --- EXCEPCIONES ---
+    # Si la petición es un archivo real (!-f) o un directorio real (!-d),
+    # como imagenes, estilos.css o scripts.js, NO apliques ninguna regla.
+    # Deja que el servidor los entregue directamente.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # --- LA REGLA MVC (El Corazón del Routing) ---
+    # Patrón:  dominio.com/CONTROLADOR/ACCION
+    # Ejemplo: dominio.com/categoria/ver
+    #
+    # Explicación de la Expresión Regular (Regex):
+    # ^                -> Inicio de la linea.
+    # ([a-zA-Z0-9-]+)  -> GRUPO 1 ($1): Cualquier palabra (letras, nums, guiones). Equivale al Controlador.
+    # /                -> Separador literal.
+    # ([a-zA-Z0-9-]+)  -> GRUPO 2 ($2): Cualquier palabra. Equivale a la Acción (método).
+    # /?               -> La barra final es opcional.
+    # $                -> Fin de la linea.
+    #
+    # Mapeo Interno:
+    # Lo enviamos a: index.php?controller=$1&action=$2
+    #
+    # Flags:
+    # [QSA] (Query String Append): CRUCIAL. Si la URL trae parámetros extra (?id=5),
+    #       pégalos al final de la URL reescrita. Sin esto, el id=5 se perdería.
+    # [L]   (Last): Si esta regla se cumple, deja de buscar más reglas.
+    RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$ index.php?controller=$1&action=$2 [QSA,L]
 </IfModule>
