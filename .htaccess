@@ -1,6 +1,7 @@
 <IfModule mod_rewrite.c>
     # Activar el motor de reescritura de URLs
-    RewriteEngine On
+    RewriteEngine On 
+    RewriteBase /tienda_mvc/Tienda_MVC/
     
     # --- EXCEPCIONES ---
     # Si la petición es un archivo real (!-f) o un directorio real (!-d),

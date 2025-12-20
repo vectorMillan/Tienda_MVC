@@ -36,6 +36,19 @@
                 </ul>
 
                 <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <?php $stats = Utils::statsCarrito(); ?>
+
+                        <a class="nav-link" href="<?= base_url ?>carrito/index">
+                            🛒 Carrito
+
+                            <span class="badge bg-danger rounded-pill">
+                                <?= $stats['count'] ?>
+                            </span>
+                        </a>
+                    </li>
+
                     <?php if (!isset($_SESSION['identity'])): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= base_url ?>usuario/login">Login</a>

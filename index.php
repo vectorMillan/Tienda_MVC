@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Iniciar buffer de salida para permitir redirecciones después de HTML
 session_start();
 require_once 'autoload.php';
 require_once 'config/db.php';
@@ -44,3 +45,4 @@ if (class_exists($nombre_controlador)) {
 }
 
 require_once 'views/layout/footer.php';
+ob_end_flush(); // Enviar el buffer al navegador

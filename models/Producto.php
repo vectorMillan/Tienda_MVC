@@ -140,4 +140,10 @@ class Producto
         $productos = $this->db->query($sql);
         return $productos;
     }
+
+    public function getOne()
+    {
+        $producto = $this->db->query("SELECT * FROM productos WHERE id = {$this->getId()}");
+        return $producto;
+    }
 }

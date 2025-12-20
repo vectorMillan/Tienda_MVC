@@ -27,4 +27,25 @@ class Utils
             return true;
         }
     }
+
+    public static function statsCarrito()
+    {
+        $stats = array(
+            'count' => 0,
+            'total' => 0
+        );
+
+        if (isset($_SESSION['carrito'])) {
+            // Contamos cuántos tipos de productos hay
+            // (Si quisieras sumar unidades totales, habría que recorrer el array sumando 'unidades')
+            $stats['count'] = count($_SESSION['carrito']);
+
+            foreach ($_SESSION['carrito'] as $producto) {
+                // Multiplicamos precio * unidades
+                $stats['total'] += $producto['precio'] * $producto['unidades'];
+            }
+        }
+
+        return $stats;
+    }
 }
