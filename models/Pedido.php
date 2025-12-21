@@ -1,0 +1,107 @@
+<?php
+
+class Pedido
+{
+    private $id;
+    private $usuario_id;
+    private $provincia;
+    private $localidad;
+    private $direccion;
+    private $coste;
+    private $estado;
+    private $fecha;
+    private $hora;
+
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = Database::connect();
+    }
+
+    // GETTERS Y SETTERS BÁSICOS
+    function getUsuario_id()
+    {
+        return $this->usuario_id;
+    }
+    function setUsuario_id($usuario_id)
+    {
+        $this->usuario_id = $usuario_id;
+    }
+
+    function getProvincia()
+    {
+        return $this->provincia;
+    }
+    function setProvincia($provincia)
+    {
+        $this->provincia = $this->db->real_escape_string($provincia);
+    }
+
+    function getLocalidad()
+    {
+        return $this->localidad;
+    }
+    function setLocalidad($localidad)
+    {
+        $this->localidad = $this->db->real_escape_string($localidad);
+    }
+
+    function getDireccion()
+    {
+        return $this->direccion;
+    }
+    function setDireccion($direccion)
+    {
+        $this->direccion = $this->db->real_escape_string($direccion);
+    }
+
+    function getCoste()
+    {
+        return $this->coste;
+    }
+    function setCoste($coste)
+    {
+        $this->coste = $coste;
+    }
+
+    // --- MÉTODOS DE GUARDADO ---
+
+    // 1. Guardar la cabecera del pedido
+    public function save()
+    {
+        $sql = "INSERT INTO pedidos VALUES(NULL, {$this->getUsuario_id()}, '{$this->getProvincia()}', '{$this->getLocalidad()}', '{$this->getDireccion()}', {$this->getCoste()}, 'confirm', CURDATE(), CURTIME());";
+        $save = $this->db->query($sql);
+
+        $result = false;
+        if ($save) {
+            $result = true;
+        }
+        return $result;
+    }
+
+    // 2. Guardar las líneas (los productos)
+    public function save_linea()
+    {
+        // A. Obtener el ID del último pedido insertado (el que acabamos de crear en save())
+        $sql = "SELECT LAST_INSERT_ID() as 'pedido';";
+        $query = $this->db->query($sql);
+        $pedido_id = $query->fetch_object()->pedido;
+
+        // B. Recorrer el carrito de la sesión
+        foreach ($_SESSION['carrito'] as $elemento) {
+            $producto = $elemento['producto'];
+
+            // C. Insertar en la tabla lineas_pedidos
+            // Estructura: id, pedido_id, producto_id, unidades
+            $insert = "INSERT INTO lineas_pedidos VALUES(NULL, {$pedido_id}, {$producto->id}, {$elemento['unidades']})";
+            $save = $this->db->query($insert);
+        }
+
+        $result = false;
+        if ($save) {
+            $result = true;
+        }
+        return $result;
+    }
+}

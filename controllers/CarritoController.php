@@ -65,4 +65,18 @@ class CarritoController
         unset($_SESSION['carrito']);
         header("Location: " . base_url . "carrito/index");
     }
+
+    public function delete()
+    {
+        if (isset($_GET['index'])) {
+            $index = $_GET['index'];
+            unset($_SESSION['carrito'][$index]);
+
+            // Opcional: Reordenar el array para que no queden huecos en los índices
+            $_SESSION['carrito'] = array_values($_SESSION['carrito']);
+        }
+
+        // Redirigimos de vuelta al carrito
+        header("Location:" . base_url . "carrito/index");
+    }
 }

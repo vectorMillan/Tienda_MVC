@@ -18,7 +18,17 @@
                     <h5 class="card-title"><?= $product->nombre ?></h5>
                     <p class="card-text text-muted"><?= $product->precio ?> MXN</p>
 
-                    <a href="<?= base_url ?>carrito/add?id=<?= $product->id ?>" class="btn btn-primary mt-auto">Comprar</a>
+                    <div class="d-grid gap-2 mt-auto">
+
+                        <a href="<?= base_url ?>carrito/add?id=<?= $product->id ?>" class="btn btn-success">
+                            Añadir
+                        </a>
+
+                        <a href="<?= base_url ?>carrito/add?id=<?= $product->id ?>" class="btn btn-primary">
+                            Comprar
+                        </a>
+
+                    </div>
                 </div>
             </div>
         </div>
