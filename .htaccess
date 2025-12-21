@@ -18,7 +18,7 @@
     # ^                -> Inicio de la linea.
     # ([a-zA-Z0-9-]+)  -> GRUPO 1 ($1): Cualquier palabra (letras, nums, guiones). Equivale al Controlador.
     # /                -> Separador literal.
-    # ([a-zA-Z0-9-]+)  -> GRUPO 2 ($2): Cualquier palabra. Equivale a la Acción (método).
+    # ([a-zA-Z0-9-_]+)  -> GRUPO 2 ($2): Cualquier palabra (letras, nums, guiones, guiones bajos). Equivale a la Acción (método).
     # /?               -> La barra final es opcional.
     # $                -> Fin de la linea.
     #
@@ -29,5 +29,5 @@
     # [QSA] (Query String Append): CRUCIAL. Si la URL trae parámetros extra (?id=5),
     #       pégalos al final de la URL reescrita. Sin esto, el id=5 se perdería.
     # [L]   (Last): Si esta regla se cumple, deja de buscar más reglas.
-    RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$ index.php?controller=$1&action=$2 [QSA,L]
+    RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-_]+)/?$ index.php?controller=$1&action=$2 [QSA,L]
 </IfModule>
