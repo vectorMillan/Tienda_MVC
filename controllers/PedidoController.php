@@ -44,6 +44,12 @@ class PedidoController
 
                 if ($save && $save_linea) {
                     $_SESSION['pedido'] = "complete";
+
+                    // --- NUEVO: VACIAR EL CARRITO TRAS COMPRA EXITOSA ---
+                    // Si no hacemos esto, el usuario sigue teniendo los productos pendientes
+                    if (isset($_SESSION['carrito'])) {
+                        unset($_SESSION['carrito']);
+                    }
                 } else {
                     $_SESSION['pedido'] = "failed";
                 }
@@ -57,5 +63,23 @@ class PedidoController
             // Si no está logueado, fuera
             header("Location:" . base_url);
         }
+    }
+
+    public function confirmado()
+    {
+        if (isset($_SESSION['identity'])) {
+            $identity = $_SESSION['identity'];
+            $pedido = new Pedido();
+            $pedido->setUsuario_id($identity->id);
+
+            // 1. Obtener los datos del pedido recién creado
+            $pedido = $pedido->getOneByUser();
+
+            // 2. Obtener los productos de ese pedido
+            $pedido_productos = new Pedido();
+            $productos = $pedido_productos->getProductosByPedido($pedido->id);
+        }
+
+        require_once 'views/pedido/confirmado.php';
     }
 }

@@ -104,4 +104,27 @@ class Pedido
         }
         return $result;
     }
+
+    // Saca el ÚLTIMO pedido registrado por un usuario específico
+    public function getOneByUser()
+    {
+        $sql = "SELECT p.id, p.coste FROM pedidos p "
+            . "WHERE p.usuario_id = {$this->getUsuario_id()} "
+            . "ORDER BY id DESC LIMIT 1";
+
+        $pedido = $this->db->query($sql);
+        return $pedido->fetch_object();
+    }
+
+    // Saca la lista de productos vinculados a un pedido específico
+    public function getProductosByPedido($id)
+    {
+        // SQL Complejo: Unimos productos con lineas_pedidos
+        $sql = "SELECT p.*, lp.unidades FROM productos p "
+            . "INNER JOIN lineas_pedidos lp ON p.id = lp.producto_id "
+            . "WHERE lp.pedido_id = {$id}";
+
+        $productos = $this->db->query($sql);
+        return $productos;
+    }
 }
