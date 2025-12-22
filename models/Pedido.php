@@ -20,6 +20,16 @@ class Pedido
     }
 
     // GETTERS Y SETTERS BÁSICOS
+
+    function getId()
+    {
+        return $this->id;
+    }
+    function setId($id)
+    {
+        $this->id = $id;
+    }
+
     function getUsuario_id()
     {
         return $this->usuario_id;
@@ -138,5 +148,13 @@ class Pedido
         $pedidos = $this->db->query($sql);
 
         return $pedidos;
+    }
+
+    // Obtener un pedido específico por su ID
+    public function getOne()
+    {
+        $sql = "SELECT * FROM pedidos WHERE id = {$this->getId()}";
+        $producto = $this->db->query($sql);
+        return $producto->fetch_object();
     }
 }

@@ -99,4 +99,29 @@ class PedidoController
             header("Location:" . base_url);
         }
     }
+
+    public function detalle()
+    {
+        if (isset($_SESSION['identity'])) {
+
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+
+                // 1. Sacar los datos del pedido (Dirección, estado, etc)
+                $pedido = new Pedido();
+                $pedido->setId($id);
+                $pedido = $pedido->getOne();
+
+                // 2. Sacar los productos
+                $pedido_productos = new Pedido();
+                $productos = $pedido_productos->getProductosByPedido($id);
+
+                require_once 'views/pedido/detalle.php';
+            } else {
+                header("Location:" . base_url . "pedido/mis_pedidos");
+            }
+        } else {
+            header("Location:" . base_url);
+        }
+    }
 }
