@@ -124,4 +124,39 @@ class PedidoController
             header("Location:" . base_url);
         }
     }
+
+    // ADMIN: Listado de gestión
+    public function gestion()
+    {
+        Utils::isAdmin(); // Verificamos que sea Admin
+        $gestion = true; // Variable bandera para la vista
+
+        $pedido = new Pedido();
+        $pedidos = $pedido->getAll();
+
+        require_once 'views/pedido/mis_pedidos.php';
+    }
+
+    // ADMIN: Procesar cambio de estado
+    public function estado()
+    {
+        Utils::isAdmin(); // Seguridad
+
+        if (isset($_POST['pedido_id']) && isset($_POST['estado'])) {
+            // Recoger datos del formulario
+            $id = $_POST['pedido_id'];
+            $estado = $_POST['estado'];
+
+            // Update en la BD
+            $pedido = new Pedido();
+            $pedido->setId($id);
+            $pedido->setEstado($estado);
+            $pedido->edit();
+
+            // Redirigir al detalle para ver el cambio
+            header("Location:" . base_url . 'pedido/detalle?id=' . $id);
+        } else {
+            header("Location:" . base_url);
+        }
+    }
 }

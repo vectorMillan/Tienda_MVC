@@ -75,6 +75,15 @@ class Pedido
         $this->coste = $coste;
     }
 
+    function getEstado()
+    {
+        return $this->estado;
+    }
+    function setEstado($estado)
+    {
+        $this->estado = $estado;
+    }
+
     // --- MÉTODOS DE GUARDADO ---
 
     // 1. Guardar la cabecera del pedido
@@ -156,5 +165,28 @@ class Pedido
         $sql = "SELECT * FROM pedidos WHERE id = {$this->getId()}";
         $producto = $this->db->query($sql);
         return $producto->fetch_object();
+    }
+
+    // ADMIN: Obtener TODOS los pedidos de la base de datos
+    public function getAll()
+    {
+        $sql = "SELECT * FROM pedidos ORDER BY id DESC";
+        $pedidos = $this->db->query($sql);
+        return $pedidos;
+    }
+
+    // ADMIN: Actualizar solo el estado de un pedido
+    public function edit()
+    {
+        $sql = "UPDATE pedidos SET estado='{$this->getEstado()}' ";
+        $sql .= " WHERE id={$this->getId()};";
+
+        $save = $this->db->query($sql);
+
+        $result = false;
+        if ($save) {
+            $result = true;
+        }
+        return $result;
     }
 }

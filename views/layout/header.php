@@ -65,7 +65,7 @@
                                 <?php if (isset($_SESSION['admin'])): ?>
                                     <li><a class="dropdown-item" href="<?= base_url ?>categoria/index">Gestionar Categorías</a></li>
                                     <li><a class="dropdown-item" href="<?= base_url ?>producto/gestion">Gestionar Productos</a></li>
-                                    <li><a class="dropdown-item" href="#">Gestionar Pedidos</a></li>
+                                    <li><a class="dropdown-item" href="<?= base_url ?>pedido/gestion">Gestionar Pedidos</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
