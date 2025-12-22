@@ -127,4 +127,16 @@ class Pedido
         $productos = $this->db->query($sql);
         return $productos;
     }
+
+    // Obtener TODOS los pedidos de un usuario
+    public function getAllByUser()
+    {
+        $sql = "SELECT * FROM pedidos "
+            . "WHERE usuario_id = {$this->getUsuario_id()} "
+            . "ORDER BY id DESC";
+
+        $pedidos = $this->db->query($sql);
+
+        return $pedidos;
+    }
 }

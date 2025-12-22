@@ -82,4 +82,21 @@ class PedidoController
 
         require_once 'views/pedido/confirmado.php';
     }
+
+    public function mis_pedidos()
+    {
+        // Seguridad: Solo usuarios logueados
+        if (isset($_SESSION['identity'])) {
+            $usuario_id = $_SESSION['identity']->id;
+
+            // Sacar los pedidos del usuario
+            $pedido = new Pedido();
+            $pedido->setUsuario_id($usuario_id);
+            $pedidos = $pedido->getAllByUser();
+
+            require_once 'views/pedido/mis_pedidos.php';
+        } else {
+            header("Location:" . base_url);
+        }
+    }
 }

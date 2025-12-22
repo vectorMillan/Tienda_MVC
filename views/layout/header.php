@@ -71,7 +71,7 @@
                                     </li>
                                 <?php endif; ?>
 
-                                <li><a class="dropdown-item" href="#">Mis Pedidos</a></li>
+                                <li><a class="dropdown-item" href="<?= base_url ?>pedido/mis_pedidos">Mis Pedidos</a></li>
                                 <li><a class="dropdown-item" href="<?= base_url ?>usuario/logout">Cerrar sesión</a></li>
                             </ul>
                         </li>
