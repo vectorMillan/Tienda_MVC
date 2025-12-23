@@ -64,4 +64,30 @@ class Categoria
         $categoria = $this->db->query("SELECT * FROM categorias WHERE id = {$this->getId()}");
         return $categoria;
     }
+
+    // Actualizar categoría
+    public function edit()
+    {
+        $sql = "UPDATE categorias SET nombre='{$this->getNombre()}' WHERE id={$this->getId()};";
+        $save = $this->db->query($sql);
+
+        $result = false;
+        if ($save) {
+            $result = true;
+        }
+        return $result;
+    }
+
+    // Eliminar categoría
+    public function delete()
+    {
+        $sql = "DELETE FROM categorias WHERE id={$this->getId()}";
+        $delete = $this->db->query($sql);
+
+        $result = false;
+        if ($delete) {
+            $result = true;
+        }
+        return $result;
+    }
 }

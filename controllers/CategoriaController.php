@@ -29,16 +29,31 @@ class CategoriaController
     // Guarda la categoría en la BD
     public function save()
     {
-        Utils::isAdmin(); // El guardia verifica primero
+        Utils::isAdmin();
 
         if (isset($_POST) && isset($_POST['nombre'])) {
-            // Guardar la categoría
+
             $categoria = new Categoria();
             $categoria->setNombre($_POST['nombre']);
-            $categoria->save();
+
+            // LÓGICA DE ACTUALIZACIÓN VS CREACIÓN
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+                $categoria->setId($id);
+                $save = $categoria->edit(); // Llamamos a UPDATE
+            } else {
+                $save = $categoria->save(); // Llamamos a INSERT
+            }
+
+            if ($save) {
+                $_SESSION['categoria'] = "complete";
+            } else {
+                $_SESSION['categoria'] = "failed";
+            }
+        } else {
+            $_SESSION['categoria'] = "failed";
         }
 
-        // Redirigir al listado
         header("Location:" . base_url . "categoria/index");
     }
 
@@ -55,5 +70,45 @@ class CategoriaController
             $productos = $producto->getAllCategory();
         }
         require_once 'views/categoria/ver.php';
+    }
+
+    public function borrar()
+    {
+        Utils::isAdmin();
+
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $categoria = new Categoria();
+            $categoria->setId($id);
+            $delete = $categoria->delete();
+
+            if ($delete) {
+                $_SESSION['delete'] = "complete";
+            } else {
+                $_SESSION['delete'] = "failed";
+            }
+        } else {
+            $_SESSION['delete'] = "failed";
+        }
+
+        header("Location:" . base_url . "categoria/index");
+    }
+
+    public function editar()
+    {
+        Utils::isAdmin();
+
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $edit = true; // Bandera para la vista
+
+            $categoria = new Categoria();
+            $categoria->setId($id);
+            $cat = $categoria->getOne()->fetch_object();
+
+            require_once 'views/categoria/crear.php';
+        } else {
+            header("Location:" . base_url . "categoria/index");
+        }
     }
 }
