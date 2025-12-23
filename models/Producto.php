@@ -146,4 +146,12 @@ class Producto
         $producto = $this->db->query("SELECT * FROM productos WHERE id = {$this->getId()}");
         return $producto;
     }
+
+    // Actualizar stock (Restar unidades vendidas)
+    public function disminuirStock($unidades)
+    {
+        $sql = "UPDATE productos SET stock = stock - {$unidades} WHERE id = {$this->getId()}";
+        $save = $this->db->query($sql);
+        return $save;
+    }
 }

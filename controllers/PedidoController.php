@@ -1,6 +1,8 @@
 <?php
 // Necesitaremos acceder a los modelos de pedido más adelante
 require_once 'models/Pedido.php';
+// Necesitaremos acceder al modelo de producto más adelante
+require_once 'models/Producto.php';
 
 class PedidoController
 {
@@ -45,6 +47,20 @@ class PedidoController
                 if ($save && $save_linea) {
                     $_SESSION['pedido'] = "complete";
 
+                    // --- NUEVO: RESTAR STOCK ---
+                    // Recorremos el carrito para actualizar el inventario de cada producto
+                    if (isset($_SESSION['carrito'])) {
+                        foreach ($_SESSION['carrito'] as $indice => $elemento) {
+                            $producto = $elemento['producto'];
+
+                            // Instanciamos el modelo Producto para usar el método disminuirStock
+                            $producto_modelo = new Producto();
+                            $producto_modelo->setId($producto->id);
+
+                            // Le pasamos las unidades que compró el usuario
+                            $producto_modelo->disminuirStock($elemento['unidades']);
+                        }
+                    }
                     // --- NUEVO: VACIAR EL CARRITO TRAS COMPRA EXITOSA ---
                     // Si no hacemos esto, el usuario sigue teniendo los productos pendientes
                     if (isset($_SESSION['carrito'])) {
@@ -148,6 +164,7 @@ class PedidoController
             $estado = $_POST['estado'];
 
             // Update en la BD
+            /** @var Pedido $pedido */
             $pedido = new Pedido();
             $pedido->setId($id);
             $pedido->setEstado($estado);
