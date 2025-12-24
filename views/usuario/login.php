@@ -20,3 +20,5 @@
 
     <button type="submit" class="btn btn-primary">Entrar</button>
 </form>
+
+<a href="<?= base_url ?>usuario/registro">Si aun no tienes una cuenta, Registrate aqui.</a>

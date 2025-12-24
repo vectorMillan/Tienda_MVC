@@ -32,3 +32,5 @@
 
     <button type="submit" class="btn btn-primary">Registrarse</button>
 </form>
+
+<a href="<?= base_url ?>usuario/login">Si ya tienes una cuenta, Inicia sesión aqui.</a>

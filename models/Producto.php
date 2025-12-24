@@ -154,4 +154,40 @@ class Producto
         $save = $this->db->query($sql);
         return $save;
     }
+
+    // Actualizar producto existente
+    public function edit()
+    {
+        $sql = "UPDATE productos SET nombre='{$this->getNombre()}', descripcion='{$this->getDescripcion()}', precio={$this->getPrecio()}, stock={$this->getStock()}, categoria_id={$this->getCategoria_id()}  ";
+
+        // TRUCO DE LA IMAGEN:
+        // Solo añadimos la parte de actualizar imagen al SQL si viene una nueva.
+        // Si this->imagen es null, la base de datos mantiene la foto vieja.
+        if ($this->getImagen() != null) {
+            $sql .= ", imagen='{$this->getImagen()}'";
+        }
+
+        $sql .= " WHERE id={$this->getId()};";
+
+        $save = $this->db->query($sql);
+
+        $result = false;
+        if ($save) {
+            $result = true;
+        }
+        return $result;
+    }
+
+    // Eliminar producto
+    public function delete()
+    {
+        $sql = "DELETE FROM productos WHERE id={$this->getId()}";
+        $delete = $this->db->query($sql);
+
+        $result = false;
+        if ($delete) {
+            $result = true;
+        }
+        return $result;
+    }
 }

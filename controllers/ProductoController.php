@@ -43,45 +43,56 @@ class ProductoController
         Utils::isAdmin();
 
         if (isset($_POST)) {
-            // Instanciamos el modelo
-            $producto = new Producto();
+            // Recogemos los datos básicos
+            $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : false;
+            $descripcion = isset($_POST['descripcion']) ? $_POST['descripcion'] : false;
+            $precio = isset($_POST['precio']) ? $_POST['precio'] : false;
+            $stock = isset($_POST['stock']) ? $_POST['stock'] : false;
+            $categoria = isset($_POST['categoria']) ? $_POST['categoria'] : false;
 
-            // Asignamos los valores básicos
-            $producto->setNombre($_POST['nombre']);
-            $producto->setDescripcion($_POST['descripcion']);
-            $producto->setPrecio($_POST['precio']);
-            $producto->setStock($_POST['stock']);
-            $producto->setCategoria_id($_POST['categoria']);
+            if ($nombre && $descripcion && $precio && $stock && $categoria) {
+                $producto = new Producto();
+                $producto->setNombre($nombre);
+                $producto->setDescripcion($descripcion);
+                $producto->setPrecio($precio);
+                $producto->setStock($stock);
+                $producto->setCategoria_id($categoria);
 
-            // --- GESTIÓN DE LA IMAGEN ---
-            // Verificamos si llega un archivo por $_FILES
-            if (isset($_FILES['imagen'])) {
-                $file = $_FILES['imagen'];
-                $filename = $file['name']; // Nombre original del archivo 
-                $mimetype = $file['type']; // Tipo MIME: image/jpeg, image/png, image/gif
+                // --- LÓGICA DE IMAGEN (FILE UPLOAD) ---
+                if (isset($_FILES['imagen'])) {
+                    $file = $_FILES['imagen'];
+                    $filename = $file['name'];
+                    $mimetype = $file['type'];
 
-                // Validamos que sea una imagen real (jpg, jpeg, png, gif)
-                if ($mimetype == "image/jpg" || $mimetype == 'image/jpeg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    // Validamos que sea una imagen real
+                    if ($mimetype == "image/jpg" || $mimetype == 'image/jpeg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
-                    // Comprobamos si existe el directorio 'uploads/images', si no, lo creamos
-                    if (!is_dir('uploads/images')) {
-                        mkdir('uploads/images', 0777, true);
+                        if (!is_dir('uploads/images')) {
+                            mkdir('uploads/images', 0777, true);
+                        }
+
+                        // Movemos el archivo y guardamos el nombre en el objeto
+                        move_uploaded_file($file['tmp_name'], 'uploads/images/' . $filename);
+                        $producto->setImagen($filename);
                     }
-
-                    // MOVER ARCHIVO: De la carpeta temporal a nuestra carpeta de destino
-                    move_uploaded_file($file['tmp_name'], 'uploads/images/' . $filename);
-
-                    // Guardamos el nombre del archivo en el modelo
-                    $producto->setImagen($filename);
                 }
-            }
-            // -----------------------------
 
-            // Guardamos en la BD
-            $save = $producto->save();
+                // --- DECISIÓN: ¿INSERT O UPDATE? ---
+                if (isset($_GET['id'])) {
+                    // Estamos editando
+                    $id = $_GET['id'];
+                    $producto->setId($id);
+                    $save = $producto->edit();
+                } else {
+                    // Estamos creando
+                    $save = $producto->save();
+                }
 
-            if ($save) {
-                $_SESSION['producto'] = "complete";
+                if ($save) {
+                    $_SESSION['producto'] = "complete";
+                } else {
+                    $_SESSION['producto'] = "failed";
+                }
             } else {
                 $_SESSION['producto'] = "failed";
             }
@@ -89,7 +100,47 @@ class ProductoController
             $_SESSION['producto'] = "failed";
         }
 
-        // Redirigimos al listado
-        header('Location:' . base_url . 'producto/gestion');
+        header("Location:" . base_url . "producto/gestion");
+    }
+
+    public function borrar()
+    {
+        Utils::isAdmin();
+
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $producto = new Producto();
+            $producto->setId($id);
+
+            $delete = $producto->delete();
+            if ($delete) {
+                $_SESSION['delete'] = "complete";
+            } else {
+                $_SESSION['delete'] = "failed";
+            }
+        } else {
+            $_SESSION['delete'] = "failed";
+        }
+
+        header("Location:" . base_url . "producto/gestion");
+    }
+
+    public function editar()
+    {
+        Utils::isAdmin();
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $edit = true;
+
+            $producto = new Producto();
+            $producto->setId($id);
+
+            // Reutilizamos getOne para rellenar el formulario
+            $pro = $producto->getOne()->fetch_object();
+
+            require_once 'views/producto/crear.php';
+        } else {
+            header("Location:" . base_url . "producto/gestion");
+        }
     }
 }
